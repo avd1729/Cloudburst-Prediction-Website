@@ -5,8 +5,6 @@ import datetime as dt
 import os
 from apikey import API_KEY
 
-st.title('Cloud Burst Prediction ⛈️')
-
 
 def get_data(CITY):
     BASE_URL = "http://api.openweathermap.org/data/2.5/weather?"
@@ -19,6 +17,8 @@ def get_data(CITY):
 
 
 def predict():
+
+    st.title('Cloud Burst Prediction ⛈️')
     CITY = st.text_input('Enter city name: ')
 
     if CITY:  # Check if CITY is not empty
