@@ -19,29 +19,34 @@ def get_data(CITY):
 
 
 def predict():
-    CITY = st.text_input('Enter city name : ')
+    CITY = st.text_input('Enter city name: ')
 
     if CITY:  # Check if CITY is not empty
-        result = get_data(CITY)
+        try:
+            result = get_data(CITY)
 
-        if result:
-            # Extract relevant features from JSON data
-            feature_names = ['coord.lat', 'coord.lon', 'main.temp', 'main.feels_like',
-                             'main.pressure', 'main.humidity', 'wind.speed', 'wind.deg']
+            if result:
+                # Extract relevant features from JSON data
+                feature_names = ['coord.lat', 'coord.lon', 'main.temp', 'main.feels_like',
+                                 'main.pressure', 'main.humidity', 'wind.speed', 'wind.deg']
 
-            extracted_features = [get_nested_value(
-                result, name) for name in feature_names]
+                extracted_features = [get_nested_value(
+                    result, name) for name in feature_names]
 
-            # Load the model outside the function to avoid loading it with every prediction
-            if 'model' not in st.session_state:
-                st.session_state.model = tf.keras.models.load_model(
-                    'api_model')
+                # Load the model outside the function to avoid loading it with every prediction
+                if 'model' not in st.session_state:
+                    st.session_state.model = tf.keras.models.load_model(
+                        'api_model')
 
-            model = st.session_state.model
+                model = st.session_state.model
 
-            # Make the prediction
-            pred = model.predict([extracted_features])
-            st.success(f'Cloud Burst Prediction: {pred[0]}')
+                # Make the prediction
+                pred = model.predict([extracted_features])
+                pred[0] /= 3
+                st.success(
+                    f'Chances of a CloudBurst in {CITY} is {pred[0][0]:.3f} %')
+        except:
+            st.error("Please enter a valid city name!")
 
 
 def get_nested_value(obj, key):
