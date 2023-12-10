@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@tensorflow/tfjs": "^4.14.0",
+    "axios": "^1.6.2"
+  }
+}
